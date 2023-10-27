@@ -11,22 +11,15 @@ import org.testng.annotations.Test;
 public class HandleDropDownByName {
     public static void TestHandleDropDownByName() {
         WebDriver driver = driverFactory.getChromeDriver();
-        Select selectOption;
         try {
             driver.get("http://live.techpanda.org/index.php/mobile.html");
-            WebElement dropdownElement = driver.findElement(By.cssSelector("body > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > select:nth-child(2)"));
-            selectOption = new Select(dropdownElement);
-            selectOption.selectByVisibleText("Position");
+            WebElement dropdownElement = driver.findElement(By.xpath("//body/div[@class='wrapper']/div[@class='page']/div[@class='main-container col3-layout']/div[@class='main']/div[@class='col-wrapper']/div[@class='col-main']/div[@class='category-products']/div[@class='toolbar']/div[@class='sorter']/div[@class='sort-by']/select[1]"));
+            Select selectOption = new Select(dropdownElement);
             selectOption.selectByVisibleText("Name");
-            selectOption.selectByVisibleText("Price");
-            selectOption.selectByValue("http://live.techpanda.org/index.php/mobile.html?dir=asc&order=position");
-            selectOption.selectByValue("http://live.techpanda.org/index.php/mobile.html?dir=asc&order=name");
-            selectOption.selectByValue("http://live.techpanda.org/index.php/mobile.html?dir=asc&order=price");
-            Thread.sleep(5000);
+            Thread.sleep(2000);
         } catch(Exception e){
             e.printStackTrace();
         }
-        driver.close();
         driver.quit();
     }
 }
