@@ -1,2 +1,2 @@
 # SWT301
-Bai cua e nam ben main master :CC, 
+E lo push nham qua branh master, bai cua em :c
