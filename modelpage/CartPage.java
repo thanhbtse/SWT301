@@ -6,11 +6,15 @@ public class CartPage {
     private By cartMessage = By.xpath("//h1[normalize-space()='Shopping Cart is Empty']");
     private By WishlistLink = By.xpath("//a[@title='My Wishlist (1 item)']");
     private By AddToCartButton = By.xpath("//span[contains(text(),'Add to Cart')]");
+    private  By ViewOrder = By.xpath("//tr[@class='first odd']//a[contains(text(),'View Order')]");
+    private By PrintOrder = By.xpath("//a[@class='link-print']");
     public CartPage(WebDriver driver) {
         this.driver = driver;
     }
     public void ClickWishListLink(){driver.findElement(WishlistLink).click();}
     public void AddToCartInWishList(){driver.findElement(AddToCartButton).click();}
+    public void ClickViewOrder(){driver.findElement(ViewOrder).click();}
+    public void ClickPrintOrder(){driver.findElement(PrintOrder).click();}
     public String getCartMessage() {
         return driver.findElement(cartMessage).getText();
     }

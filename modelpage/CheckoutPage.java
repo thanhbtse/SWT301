@@ -1,69 +1,198 @@
 package BaiTap.modelpage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 public class CheckoutPage {
-    private final WebDriver driver;
+    WebDriver driver;
+
+    By addressSelectorBilling = By.id("billing-address-select");
+    By firstNameBillingInputLocator = By.id("billing:firstname");
+    By middleNameBillingInputLocator = By.id("billing:middlename");
+    By lastNameBillingInputLocator = By.id("billing:lastname");
+    By companyBillingInputLocator = By.id("billing:company");
+    By address1BillingInputLocator = By.id("billing:street1");
+    By address2BillingInputLocator = By.id("billing:street2");
+    By cityBillingInputLocator = By.id("billing:city");
+    By stateBillingSelector = By.id("billing:region_id");
+    By zipBillingInputLocator = By.id("billing:postcode");
+    By countryBillingSelector = By.id("billing:country_id");
+    By telephoneBillingInputLocator = By.id("billing:telephone");
+    By faxBillingInputLocator = By.id("billing:fax");
+    By shipToDifferentAddress = By.xpath("//label[normalize-space()='Ship to different address']");
+    By continueBillingButton = By.xpath("//button[@onclick='billing.save()']//span//span[contains(text(),'Continue')]");
+    By addressSelectorShipping = By.id("shipping-address-select");
+    By firstNameShippingInputLocator = By.id("shipping:firstname");
+    By middleNameShippingInputLocator = By.id("shipping:middlename");
+    By lastNameShippingInputLocator = By.id("shipping:lastname");
+    By companyShippingInputLocator = By.id("shipping:company");
+    By address1ShippingInputLocator = By.id("shipping:street1");
+    By address2ShippingInputLocator = By.id("shipping:street2");
+    By cityShippingInputLocator = By.id("shipping:city");
+    By stateShippingSelector = By.id("shipping:region_id");
+    By zipShippingInputLocator = By.id("shipping:postcode");
+    By countryShippingSelector = By.id("shipping:country_id");
+    By telephoneShippingInputLocator = By.id("shipping:telephone");
+    By faxShippingInputLocator = By.id("shipping:fax");
+    By continueShippingButton = By.xpath("//button[@onclick='shipping.save()']//span//span[contains(text(),'Continue')]");
+    By continueShippingMethodButton = By.xpath("//button[@onclick='shippingMethod.save()']//span//span[contains(text(),'Continue')]");
+    By continuePaymentButton = By.xpath("//button[@class='button']//span//span[contains(text(),'Continue')]");
+    By choosePayment = By.xpath("//label[normalize-space()='Check / Money order']");
+    By placeOrderButton = By.xpath("//button[@title='Place Order']");
 
     public CheckoutPage(WebDriver driver) {
         this.driver = driver;
     }
-
-    public void enterShippingDetails(String country, String state, String zip) {
-        driver.findElement(By.id("country")).sendKeys(country);
-        driver.findElement(By.id("region_id")).sendKeys(state);
-        driver.findElement(By.id("postcode")).sendKeys(zip);
-        driver.findElement(By.xpath("//span[contains(text(),'Estimate')]")).click();
+    public void selectAddressBilling(String address){
+        WebElement addressElement = driver.findElement(addressSelectorBilling);
+        Select select = new Select(addressElement);
+        select.selectByVisibleText(address);
     }
-
-    public void verifyShippingCost() {
-        // Add verification logic for shipping cost here
-        // You can use assertions or other validation methods.
-        // Example: Assert.assertTrue(driver.findElement(By.id("shipping-cost")).isDisplayed(), "Shipping cost is displayed");
+    public void enterFirstNameBilling(String firstName) {
+        WebElement firstNameElement = driver.findElement(firstNameBillingInputLocator);
+        firstNameElement.clear();
+        firstNameElement.sendKeys(firstName);
     }
-
-    public void updateTotal() {
-        driver.findElement(By.xpath("//label[@for='s_method_flatrate_flatrate']")).click();
+    public void enterMiddleNameBilling(String middleName){
+        WebElement middleNameElement = driver.findElement(middleNameBillingInputLocator);
+        middleNameElement.clear();
+        middleNameElement.sendKeys(middleName);
     }
-
-    public void proceedToCheckout() {
-        driver.findElement(By.xpath("//li[@class='method-checkout-cart-methods-onepage-bottom']//button[@title='Proceed to Checkout']//span//span[contains(text(),'Proceed to Checkout')]")).click();
+    public void enterLastNameBilling(String lastName) {
+        WebElement lastNameElement = driver.findElement(lastNameBillingInputLocator);
+        lastNameElement.clear();
+        lastNameElement.sendKeys(lastName);
     }
-
-    public void enterBillingInformation(String newAddress, String address, String city, String state, String zip, String country, String telephone) {
-        driver.findElement(By.id("billing-address-select")).sendKeys(newAddress);
-        driver.findElement(By.id("billing:street1")).sendKeys(address);
-        driver.findElement(By.id("billing:city")).sendKeys(city);
-        driver.findElement(By.id("billing:region_id")).sendKeys(state);
-        driver.findElement(By.id("billing:postcode")).sendKeys(zip);
-        driver.findElement(By.id("billing:country_id")).sendKeys(country);
-        driver.findElement(By.id("billing:telephone")).sendKeys(telephone);
-        driver.findElement(By.xpath("//label[@for='billing:use_for_shipping_no']")).click();
-        driver.findElement(By.xpath("//button[@onclick='billing.save()']//span//span[contains(text(),'Continue')]")).click();
+    public void enterCompanyBilling(String company){
+        WebElement companyElement = driver.findElement(companyBillingInputLocator);
+        companyElement.clear();
+        companyElement.sendKeys(company);
     }
-    public void enterShippingInformation(String newAddress, String address, String city, String state, String zip, String country, String telephone) {
-        driver.findElement(By.id("shipping-address-select")).sendKeys(newAddress);
-        driver.findElement(By.id("shipping:street1")).sendKeys(address);
-        driver.findElement(By.id("shipping:city")).sendKeys(city);
-        driver.findElement(By.id("shipping:region_id")).sendKeys(state);
-        driver.findElement(By.id("shipping:postcode")).sendKeys(zip);
-        driver.findElement(By.id("shipping:country_id")).sendKeys(country);
-        driver.findElement(By.id("shipping:telephone")).sendKeys(telephone);
-        driver.findElement(By.xpath("//label[@for='shipping:same_as_billing']")).click();
-        driver.findElement(By.xpath("//button[@onclick='shipping.save()']//span//span[contains(text(),'Continue')]")).click();
+    public void enterAddress1Billing(String address1){
+        WebElement address1Element = driver.findElement(address1BillingInputLocator);
+        address1Element.clear();
+        address1Element.sendKeys(address1);
     }
-
-    public void ShippingMethodContinue() {
-        driver.findElement(By.xpath("//button[@onclick='shippingMethod.save()']")).click();
+    public void enterAddress2Billing(String address2){
+        WebElement address2Element = driver.findElement(address2BillingInputLocator);
+        address2Element.clear();
+        address2Element.sendKeys(address2);
     }
-
-    public void selectPaymentInformationAndContinue() {
-        driver.findElement(By.xpath("//label[@for='p_method_checkmo']")).click();
-        driver.findElement(By.xpath("//button[@class='button']//span//span[contains(text(),'Continue')]")).click();
+    public void enterCityBilling(String city){
+        WebElement cityElement = driver.findElement(cityBillingInputLocator);
+        cityElement.clear();
+        cityElement.sendKeys(city);
     }
-
-    public void placeOrder() {
-        driver.findElement(By.xpath("//button[@title='Place Order']")).click();
+    public void selectStateBilling(String state){
+        WebElement stateElement = driver.findElement(stateBillingSelector);
+        Select select = new Select(stateElement);
+        select.selectByVisibleText(state);
     }
-
+    public void enterZipBilling(String zip){
+        WebElement zipElement = driver.findElement(zipBillingInputLocator);
+        zipElement.clear();
+        zipElement.sendKeys(zip);
+    }
+    public void selectCountryBilling(String country){
+        WebElement countryElement = driver.findElement(countryBillingSelector);
+        Select select = new Select(countryElement);
+        select.selectByVisibleText(country);
+    }
+    public void enterTelephoneBilling(String telephone){
+        WebElement telephoneElement = driver.findElement(telephoneBillingInputLocator);
+        telephoneElement.clear();
+        telephoneElement.sendKeys(telephone);
+    }
+    public void enterFaxBilling(String fax){
+        WebElement faxElement = driver.findElement(faxBillingInputLocator);
+        faxElement.clear();
+        faxElement.sendKeys(fax);
+    }
+    public void clickShipToDifferentAddress() {
+        driver.findElement(shipToDifferentAddress).click();
+    }
+    public void clickContinueBillingButton() {
+        driver.findElement(continueBillingButton).click();
+    }
+    public void selectAddressShipping(String address){
+        WebElement addressElement = driver.findElement(addressSelectorShipping);
+        Select select = new Select(addressElement);
+        select.selectByVisibleText(address);
+    }
+    public void enterFirstNameShipping(String firstName) {
+        WebElement firstNameElement = driver.findElement(firstNameShippingInputLocator);
+        firstNameElement.clear();
+        firstNameElement.sendKeys(firstName);
+    }
+    public void enterMiddleNameShipping(String middleName){
+        WebElement middleNameElement = driver.findElement(middleNameShippingInputLocator);
+        middleNameElement.clear();
+        middleNameElement.sendKeys(middleName);
+    }
+    public void enterLastNameShipping(String lastName) {
+        WebElement lastNameElement = driver.findElement(lastNameShippingInputLocator);
+        lastNameElement.clear();
+        lastNameElement.sendKeys(lastName);
+    }
+    public void enterCompanyShipping(String company){
+        WebElement companyElement = driver.findElement(companyShippingInputLocator);
+        companyElement.clear();
+        companyElement.sendKeys(company);
+    }
+    public void enterAddress1Shipping(String address1){
+        WebElement address1Element = driver.findElement(address1ShippingInputLocator);
+        address1Element.clear();
+        address1Element.sendKeys(address1);
+    }
+    public void enterAddress2Shipping(String address2){
+        WebElement address2Element = driver.findElement(address2ShippingInputLocator);
+        address2Element.clear();
+        address2Element.sendKeys(address2);
+    }
+    public void enterCityShipping(String city){
+        WebElement cityElement = driver.findElement(cityShippingInputLocator);
+        cityElement.clear();
+        cityElement.sendKeys(city);
+    }
+    public void selectStateShipping(String state){
+        WebElement stateElement = driver.findElement(stateShippingSelector);
+        Select select = new Select(stateElement);
+        select.selectByVisibleText(state);
+    }
+    public void enterZipShipping(String zip){
+        WebElement zipElement = driver.findElement(zipShippingInputLocator);
+        zipElement.clear();
+        zipElement.sendKeys(zip);
+    }
+    public void selectCountryShipping(String country){
+        WebElement countryElement = driver.findElement(countryShippingSelector);
+        Select select = new Select(countryElement);
+        select.selectByVisibleText(country);
+    }
+    public void enterTelephoneShipping(String telephone){
+        WebElement telephoneElement = driver.findElement(telephoneShippingInputLocator);
+        telephoneElement.clear();
+        telephoneElement.sendKeys(telephone);
+    }
+    public void enterFaxShipping(String fax){
+        WebElement faxElement = driver.findElement(faxShippingInputLocator);
+        faxElement.clear();
+        faxElement.sendKeys(fax);
+    }
+    public void clickContinueShippingButton() {
+        driver.findElement(continueShippingButton).click();
+    }
+    public void clickContinueShippingMethodButton() {
+        driver.findElement(continueShippingMethodButton).click();
+    }
+    public void clickContinuePaymentButton() {
+        driver.findElement(continuePaymentButton).click();
+    }
+    public void clickChoosePayment() {
+        driver.findElement(choosePayment).click();
+    }
+    public void clickPlaceOrderButton() {
+        driver.findElement(placeOrderButton).click();
+    }
 }
 

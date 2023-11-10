@@ -1,56 +1,121 @@
 package BaiTap.Test.TC5;
+
+import driver.driverFactory;
+import org.apache.commons.io.FileUtils;
+//import org.junit.Assert;
+import org.openqa.selenium.*;
 import BaiTap.modelpage.RegisterPage;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.testng.Assert;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import org.testng.AssertJUnit;
+
+import java.io.File;
+
+@org.testng.annotations.Test
 public class VerifyCreateAccountAndShareWishList {
-    private WebDriver driver;
+    public static void tc05() {
+        String firstname ="Thanh";
+        String middlename ="Bui";
+        String lastname ="Thanh";
+        String email_address ="cus45@gmail.com";
+        String password ="123456";
+        String confirmation = "123456";
 
-    @BeforeTest
-    public void setUp() {
-        driver = new ChromeDriver();
-    }
-
-    @Test
-    public void testRegistrationAndWishlistSharing() {
+        //  Init web-driver session
+        WebDriver driver = driverFactory.getChromeDriver();
         try {
+            // 1. Open target page
             driver.get("http://live.techpanda.org/");
-
-            // Register
             RegisterPage registerPage = new RegisterPage(driver);
-            registerPage.openAccountPage();
-            registerPage.openRegistration();
-           // registerPage.fillUserInfo();
-            registerPage.clickRegister();
-            // Check registration successful
-            // This assumes there's a confirmation message or element you can check. Adjust as necessary.
-            Assert.assertTrue(driver.getPageSource().contains("account registration done"));
+            // Delay Web for Performance
 
-            // Go to TV menu and add product to wishlist
-            driver.findElement(By.linkText("TV")).click();
-            driver.findElement(By.xpath("//a[text()='LG LCD']/following-sibling::a[text()='Add to Wishlist']")).click();
+            // 2. Click on my account link
+            registerPage.myAccountLink();
 
-            // Share wishlist
-            driver.findElement(By.linkText("SHARE WISHLIST")).click();
-            // Assuming placeholders for email and message fields. Adjust XPath or locators as necessary.
-            driver.findElement(By.name("email")).sendKeys("someone@example.com");
-            driver.findElement(By.name("message")).sendKeys("Check out this wishlist!");
-            driver.findElement(By.linkText("SHARE WISHLIST")).click();
+            // switching to new window
+            for (String handle : driver.getWindowHandles()) {
+                driver.switchTo().window(handle);
+            }
 
-            // Check wishlist shared
-            // Adjust this based on the confirmation message or element after sharing.
-            Assert.assertTrue(driver.getPageSource().contains("wishlist shared successfully"));
+            // 3. Click Create an Account link and fill New User information excluding the registered Email ID.
+            registerPage.createAccountLink();
+
+            // switching to new window
+            for (String handle : driver.getWindowHandles()) {
+                driver.switchTo().window(handle);
+            }
+            // 3a. fill New User information excluding the registered Email ID
+            registerPage.enterFirstName(firstname);
+            registerPage.enterMiddleName(middlename);
+            registerPage.enterLastName(lastname);
+            registerPage.enterEmailAddress(email_address);
+            registerPage.enterPassword(password);
+            registerPage.enterPasswordConfirmation(confirmation);
+
+            //4. Click Register
+            registerPage.registerButton();
+
+            // switching to new window
+            for (String handle : driver.getWindowHandles()) {
+                driver.switchTo().window(handle);
+            }
+
+            //5. Verify Registration is done. Expected account registration done.
+            String vWelcome = ("WELCOME, "+firstname.toUpperCase()+" "+middlename.toUpperCase()+ " "+lastname.toUpperCase()+"!");
+            String tWelcome = driver.findElement(By.xpath("//div[1]/p[1]")).getText();
+            System.out.println(tWelcome);
+
+            // Catch Error
+            AssertJUnit Assert = null;
+            try {
+                Assert.assertEquals(vWelcome, tWelcome);
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            // 6. Go To TV Menu
+            driver.findElement(By.xpath("(//a[@class='level0 '])[2]")).click();
+
+            // 7. Add product in your wish list - use product - LG LCD
+            driver.findElement(By.xpath("//a[@class='link-wishlist']")).click();
+
+            // 8. Click SHARE WISHLIST
+            driver.findElement(By.xpath("//button[@class='button btn-share']")).click();
+
+            //9. In next page enter Email and a message and click SHARE WISHLIST
+            WebElement typeEmail = driver.findElement(By.id("email_address"));
+            typeEmail.clear();
+            typeEmail.sendKeys("tinhtse173630@fpt.edu.vn");
+
+            WebElement typeMess = driver.findElement(By.id("message"));
+            typeMess.clear();
+            typeMess.sendKeys("hihihi");
+
+            // click SHARE WISHLIST
+            driver.findElement(By.xpath("//button[@title='Share Wishlist']")).click();
+
+            // switching to new window
+            for (String handle : driver.getWindowHandles()) {
+                driver.switchTo().window(handle);
+            }
+
+            // 10.Check wishlist is shared. Expected wishlist shared successfully.
+            WebElement messageWishlist = driver.findElement(By.xpath("//li[@class='success-msg']//li[1]"));
+            String expectedMessageWishlist = "Your Wishlist has been shared.";
+
+            try {
+                Assert.assertEquals(expectedMessageWishlist, messageWishlist.getText());
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            // Take Screen shot
+            File srcFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+            String png = "C:\\Users\\Dung\\Downloads\\selenium-webdriver-java-master\\selenium-webdriver-java-master\\src\\test\\java\\BaiTapDemo\\TC05.png";
+            FileUtils.copyFile(srcFile, new File(png));
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-    @AfterTest
-    public void tearDown() {
+        //  Quit browser session
         driver.quit();
     }
 }
